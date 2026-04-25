@@ -3,72 +3,81 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <style>
-        body { background-color: #1a1d1e; color: #fff; font-family: 'Courier New', monospace; text-align: center; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        body { background-color: #1a1d1e; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; font-family: 'Courier New', monospace; }
+        .module { background-color: #a7acb2; border: 12px solid #2f3336; padding: 20px; border-radius: 8px; width: 300px; box-shadow: 0 10px 20px rgba(0,0,0,0.5); }
         
-        .bomb-module { background-color: #555; border: 12px solid #333; border-radius: 8px; padding: 20px; width: 300px; box-shadow: 0 0 20px rgba(0,0,0,0.8); }
+        .screen { background-color: #cbb965; border: 4px solid #1f2224; height: 100px; position: relative; padding: 10px; color: #222; font-weight: bold; }
+        #timer { position: absolute; right: 10px; top: 30px; font-size: 50px; }
+        #target-digit { position: absolute; top: 5px; left: 10px; font-size: 24px; }
+        #typed-numbers { position: absolute; bottom: 5px; left: 10px; font-size: 24px; }
 
-        /* The Screen Layout */
-        .screen { background-color: #000; border: 4px solid #444; padding: 15px; margin-bottom: 20px; color: #ffcc00; font-family: 'Courier New', monospace; position: relative; }
-        #timer { font-size: 50px; font-weight: bold; }
-        #target-digit { position: absolute; top: 5px; left: 10px; font-size: 24px; color: #ffcc00; }
-
-        /* Keypad Styling */
-        .keypad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
-        .key { padding: 20px; font-size: 30px; font-weight: bold; background-color: #888; border: none; border-radius: 5px; box-shadow: 0 4px #444; color: #000; cursor: pointer; }
-        .key:active { background-color: #aaa; box-shadow: 0 2px #444; transform: translateY(2px); }
+        .keypad { display: grid; grid-template-columns: repeat(3, 80px); gap: 10px; justify-content: center; margin-top: 20px; }
+        .btn { font-size: 30px; background-color: #8c9096; border: none; border-radius: 8px; width: 80px; height: 60px; cursor: pointer; 
+               box-shadow: 0 5px #555; transition: all 0.1s; }
+        .btn:active { box-shadow: 0 2px #555; transform: translateY(3px); }
     </style>
 </head>
 <body>
-    <div class="bomb-module">
+    <div class="module">
         <div class="screen">
-            <div id="target-digit">4</div>
-            <div id="timer">00:40</div>
+            <div id="target-digit">?</div>
+            <div id="timer">01:00</div>
+            <div id="typed-numbers"></div>
         </div>
-        <div class="keypad">
-            <button class="key" onclick="press(1)">1</button>
-            <button class="key" onclick="press(2)">2</button>
-            <button class="key" onclick="press(3)">3</button>
-            <button class="key" onclick="press(4)">4</button>
-            <button class="key" onclick="press(5)">5</button>
-            <button class="key" onclick="press(6)">6</button>
-            <button class="key" onclick="press(7)">7</button>
-            <button class="key" onclick="press(8)">8</button>
-            <button class="key" onclick="press(9)">9</button>
-            <button class="key" style="visibility:hidden"></button>
-            <button class="key" onclick="press(0)">0</button>
-            <button class="key" style="visibility:hidden"></button>
-        </div>
+        <div class="keypad" id="keypad"></div>
     </div>
 
     <script>
-        const sequence = [4, 1, 6, 8]; // Set your defusal sequence here
+        // Change these 8 numbers to your preferred sequence
+        const sequence = [1, 2, 3, 4, 5, 6, 7, 8]; 
         let currentStep = 0;
-        let time = 40;
+        let time = 60;
+        let timerPaused = false;
 
-        const timerDisplay = document.getElementById('timer');
         const targetDisplay = document.getElementById('target-digit');
+        const typedDisplay = document.getElementById('typed-numbers');
+        const timerDisplay = document.getElementById('timer');
+
+        targetDisplay.innerText = sequence[currentStep];
+
+        const keypad = document.getElementById('keypad');
+        [1,2,3,4,5,6,7,8,9, null, 0, null].forEach(num => {
+            if (num === null) { const spacer = document.createElement('div'); keypad.appendChild(spacer); }
+            else {
+                const btn = document.createElement('button');
+                btn.className = 'btn'; btn.innerText = num;
+                btn.onclick = () => press(num);
+                keypad.appendChild(btn);
+            }
+        });
 
         function press(num) {
+            if (timerPaused) return;
             if (num === sequence[currentStep]) {
+                typedDisplay.innerText += num;
                 currentStep++;
                 if (currentStep < sequence.length) {
                     targetDisplay.innerText = sequence[currentStep];
                 } else {
-                    document.body.innerHTML = "<h1>DEFUSED</h1>";
+                    targetDisplay.innerText = "OK";
+                    timerPaused = true;
                 }
             } else {
                 currentStep = 0;
+                typedDisplay.innerText = "";
                 targetDisplay.innerText = sequence[currentStep];
             }
         }
 
         setInterval(() => {
-            time--;
-            timerDisplay.innerText = "00:" + (time < 10 ? "0" : "") + time;
-            if (time <= 0) document.body.innerHTML = "<h1>BOOM!</h1>";
+            if (!timerPaused && time > 0) {
+                time--;
+                timerDisplay.innerText = "00:" + (time < 10 ? "0" : "") + time;
+            }
         }, 1000);
     </script>
 </body>
 </html>
+
 
 
