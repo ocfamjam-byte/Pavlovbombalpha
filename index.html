@@ -85,29 +85,76 @@
                     isDefused = true;
                     clearInterval(timerInterval);
                     overlay.style.display = "flex";
-                    overlay.style.backgroundColor = "green";
-                    overlay.innerText = "DEFUSED";
+                    overlay.style.backgroundColor = "<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <style>
+        body { background-color: #1a1d1e; color: #fff; font-family: 'Courier New', monospace; text-align: center; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        
+        .bomb-module { background-color: #555; border: 12px solid #333; border-radius: 8px; padding: 20px; width: 300px; box-shadow: 0 0 20px rgba(0,0,0,0.8); }
+
+        /* The Screen Layout */
+        .screen { background-color: #000; border: 4px solid #444; padding: 15px; margin-bottom: 20px; color: #ffcc00; font-family: 'Courier New', monospace; position: relative; }
+        #timer { font-size: 50px; font-weight: bold; }
+        #target-digit { position: absolute; top: 5px; left: 10px; font-size: 24px; color: #ffcc00; }
+
+        /* Keypad Styling */
+        .keypad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+        .key { padding: 20px; font-size: 30px; font-weight: bold; background-color: #888; border: none; border-radius: 5px; box-shadow: 0 4px #444; color: #000; cursor: pointer; }
+        .key:active { background-color: #aaa; box-shadow: 0 2px #444; transform: translateY(2px); }
+    </style>
+</head>
+<body>
+    <div class="bomb-module">
+        <div class="screen">
+            <div id="target-digit">4</div>
+            <div id="timer">00:40</div>
+        </div>
+        <div class="keypad">
+            <button class="key" onclick="press(1)">1</button>
+            <button class="key" onclick="press(2)">2</button>
+            <button class="key" onclick="press(3)">3</button>
+            <button class="key" onclick="press(4)">4</button>
+            <button class="key" onclick="press(5)">5</button>
+            <button class="key" onclick="press(6)">6</button>
+            <button class="key" onclick="press(7)">7</button>
+            <button class="key" onclick="press(8)">8</button>
+            <button class="key" onclick="press(9)">9</button>
+            <button class="key" style="visibility:hidden"></button>
+            <button class="key" onclick="press(0)">0</button>
+            <button class="key" style="visibility:hidden"></button>
+        </div>
+    </div>
+
+    <script>
+        const sequence = [4, 1, 6, 8]; // Set your defusal sequence here
+        let currentStep = 0;
+        let time = 40;
+
+        const timerDisplay = document.getElementById('timer');
+        const targetDisplay = document.getElementById('target-digit');
+
+        function press(num) {
+            if (num === sequence[currentStep]) {
+                currentStep++;
+                if (currentStep < sequence.length) {
+                    targetDisplay.innerText = sequence[currentStep];
+                } else {
+                    document.body.innerHTML = "<h1>DEFUSED</h1>";
                 }
             } else {
-                currentStep = 0; // Sequence RESET penalty
+                currentStep = 0;
                 targetDisplay.innerText = sequence[currentStep];
             }
         }
 
-        // Main Timer Loop
-        const timerInterval = setInterval(() => {
-            totalSeconds--;
-            updateTimerDisplay();
-            
-            if (totalSeconds <= 0) {
-                clearInterval(timerInterval);
-                overlay.style.display = "flex";
-                overlay.style.backgroundColor = "red";
-                overlay.innerText = "BOOM!";
-            }
+        setInterval(() => {
+            time--;
+            timerDisplay.innerText = "00:" + (time < 10 ? "0" : "") + time;
+            if (time <= 0) document.body.innerHTML = "<h1>BOOM!</h1>";
         }, 1000);
-
-        updateTimerDisplay();
     </script>
 </body>
 </html>
+
