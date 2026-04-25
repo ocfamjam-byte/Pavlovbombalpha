@@ -5,93 +5,6 @@
     <style>
         body { background-color: #1a1d1e; color: #fff; font-family: 'Courier New', monospace; text-align: center; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
         
-        /* The main bomb module housing */
-        .module { background-color: #a7acb2; border: 15px solid #2f3336; border-radius: 10px; padding: 25px; box-shadow: 0 10px 20px rgba(0,0,0,0.5); width: 320px; }
-
-        /* The Main Digital Display Section */
-        .display-unit { background-color: #cbb965; border: 4px solid #1f2224; border-radius: 4px; padding: 10px; margin-bottom: 25px; display: flex; justify-content: space-between; align-items: center; color: #000; font-family: 'Arial', sans-serif; font-weight: bold; position: relative; }
-        
-        /* Small Target Digit Box */
-        #target-display { font-size: 20px; background-color: #797148; border: 2px solid #000; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; position: absolute; left: 10px; top: 10px; color: black !important; }
-        
-        /* The main clock display */
-        #timer { font-size: 55px; letter-spacing: -3px; font-weight: 800; width: 100%; text-align: center; }
-
-        /* Keypad Grid (4 columns for the 0, #, * rows) */
-        .keypad { display: grid; grid-template-columns: repeat(3, 80px); gap: 15px; justify-content: center; margin-top: 10px; }
-        
-        /* Pavlov Button Styling (Rounded Gray Squares with Indent Effect) */
-        .btn { font-size: 38px; color: #333; font-weight: bold; background-color: #8c9096; border: none; border-radius: 15px; width: 80px; height: 80px; cursor: pointer; box-shadow: inset 0 -4px 0px rgba(0,0,0,0.2), 0 3px 6px rgba(0,0,0,0.3); transition: transform 0.1s; }
-        .btn:active { transform: scale(0.95); box-shadow: inset 0 2px 4px rgba(0,0,0,0.3); }
-
-        /* Success/Failure Overlays */
-        #status-overlay { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; justify-content: center; align-items: center; font-size: 60px; font-weight: bold; color: white; text-shadow: 0 5px 10px rgba(0,0,0,0.5); z-index: 100; }
-    </style>
-</head>
-<body>
-    <div class="module">
-        <div class="display-unit">
-            <div id="target-display">?</div>
-            <div id="timer">01:00</div>
-        </div>
-        <div class="keypad" id="keypad">
-            <button class="btn" onclick="checkDigit(1)">1</button>
-            <button class="btn" onclick="checkDigit(2)">2</button>
-            <button class="btn" onclick="checkDigit(3)">3</button>
-            <button class="btn" onclick="checkDigit(4)">4</button>
-            <button class="btn" onclick="checkDigit(5)">5</button>
-            <button class="btn" onclick="checkDigit(6)">6</button>
-            <button class="btn" onclick="checkDigit(7)">7</button>
-            <button class="btn" onclick="checkDigit(8)">8</button>
-            <button class="btn" onclick="checkDigit(9)">9</button>
-            <button class="btn" style="visibility:hidden"></button>
-            <button class="btn" onclick="checkDigit(0)">0</button>
-            <button class="btn" style="visibility:hidden"></button>
-        </div>
-    </div>
-    
-    <div id="status-overlay"></div>
-
-    <script>
-        // The secret sequence to defuse
-        const sequence = [1, 5, 9, 3, 2, 7, 0]; 
-        let currentStep = 0;
-        let totalSeconds = 60;
-        let isDefused = false;
-
-        // Initialize Display
-        const targetDisplay = document.getElementById('target-display');
-        const timerDisplay = document.getElementById('timer');
-        const overlay = document.getElementById('status-overlay');
-        
-        targetDisplay.innerText = sequence[currentStep];
-
-        // Format and print the timer display
-        function updateTimerDisplay() {
-            const minutes = Math.floor(totalSeconds / 60);
-            const seconds = totalSeconds % 60;
-            timerDisplay.innerText = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-        }
-
-        // Logic Check
-        function checkDigit(digit) {
-            if (isDefused || totalSeconds <= 0) return;
-
-            if (digit === sequence[currentStep]) {
-                currentStep++;
-                if (currentStep < sequence.length) {
-                    targetDisplay.innerText = sequence[currentStep];
-                } else {
-                    isDefused = true;
-                    clearInterval(timerInterval);
-                    overlay.style.display = "flex";
-                    overlay.style.backgroundColor = "<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <style>
-        body { background-color: #1a1d1e; color: #fff; font-family: 'Courier New', monospace; text-align: center; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        
         .bomb-module { background-color: #555; border: 12px solid #333; border-radius: 8px; padding: 20px; width: 300px; box-shadow: 0 0 20px rgba(0,0,0,0.8); }
 
         /* The Screen Layout */
@@ -157,4 +70,5 @@
     </script>
 </body>
 </html>
+
 
